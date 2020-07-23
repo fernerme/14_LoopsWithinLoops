@@ -3,8 +3,8 @@ This project demonstrates NESTED LOOPS (i.e., loops within loops)
 in the context of TWO-DIMENSIONAL GRAPHICS.
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Melina Ferner.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -80,9 +80,36 @@ def draw_L(window, circle, r, c):
     and m and n are small, positive integers.
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
+    # Store original values:
+    original_x = circle.center.x
+    original_y = circle.center.y
+    radius = circle.radius
+    fill_color = circle.fill_color
+
+    # Create column part of L (including 3x3 corner):
+    for k in range(r+3):
+        for j in range(3):
+            x = original_x + 2*j*radius
+            y = original_y + 2*k*radius
+            new_circle = rg.Circle(rg.Point(x, y), radius)
+            new_circle.fill_color = fill_color
+            new_circle.attach_to(window)
+            window.render(0.1)
+
+    # Create row part of L:
+    new_ref_x = original_x + 6*radius
+    new_ref_y = original_y + 2*r*radius
+    for k in range(3):
+        for j in range(c):
+            x = new_ref_x + 2*j*radius
+            y = new_ref_y + 2*k*radius
+            new_circle = rg.Circle(rg.Point(x, y), radius)
+            new_circle.fill_color = fill_color
+            new_circle.attach_to(window)
+            window.render(0.1)
 
 
 def run_test_draw_wall_on_right():
@@ -121,9 +148,29 @@ def draw_wall_on_right(rectangle, n, window):
     and n is a small, positive integer.
     """
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
+    # Find & store original values:
+    ulc_coordinates = rectangle.get_upper_left_corner()
+    ulc_x_ref = ulc_coordinates.x
+    ulc_y_ref = ulc_coordinates.y
+    lrc_coordinates = rectangle.get_lower_right_corner()
+    lrc_x_ref = lrc_coordinates.x
+    lrc_y_ref = lrc_coordinates.y
+    height = rectangle.get_height()
+    width = rectangle.get_width()
+
+    # Loop to create wall:
+    for k in range(n):
+        for j in range(k+1):
+            ulc_x = ulc_x_ref - width*j
+            ulc_y = ulc_y_ref + height*k
+            lrc_x = lrc_x_ref - width*j
+            lrc_y = lrc_y_ref + height*k
+            new_rectangle = rg.Rectangle(rg.Point(ulc_x, ulc_y), rg.Point(lrc_x, lrc_y))
+            new_rectangle.attach_to(window)
+            window.render(0.1)
 
 
 # ----------------------------------------------------------------------
